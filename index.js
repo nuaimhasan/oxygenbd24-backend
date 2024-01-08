@@ -27,6 +27,7 @@ const categoryRouter = require("./routes/categoriesRoutes");
 const subCategoryRouter = require("./routes/subCategoriesRoute");
 const subSubCategoryRouter = require("./routes/subSubCategoriesRoute");
 const newsCategoryRouter = require("./routes/newsCategoriesRoute");
+const themeRouter = require("./routes/themeRoutes");
 
 const adminRouter = require("./routes/administratorRoute");
 
@@ -63,6 +64,7 @@ app.use("/categories", categoryRouter);
 app.use("/sub-categories", subCategoryRouter);
 app.use("/sub-sub-categories", subSubCategoryRouter);
 app.use("/news-category", newsCategoryRouter);
+app.use("/themes", themeRouter);
 
 app.use("/admins", adminRouter);
 
