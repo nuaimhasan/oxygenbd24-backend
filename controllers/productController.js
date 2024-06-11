@@ -1,8 +1,8 @@
 const Product = require("../models/productModel");
-const slugify = require("slugify");
 const fs = require("fs");
 const { pick } = require("../utils/pick");
 const { calculatePagination } = require("../utils/calculatePagination");
+const { default: slugify } = require("slugify");
 
 exports.addProduct = async (req, res) => {
   const image = req?.file?.filename;
@@ -15,23 +15,28 @@ exports.addProduct = async (req, res) => {
     });
   }
 
-  const slug = slugify(`${data?.title}-${Date.now()}`).toLowerCase();
-
-  const product = {
-    ...data,
-    image,
-    slug,
-  };
-
   try {
+    const slug = slugify(data?.title);
+    const product = {
+      ...data,
+      image,
+      slug,
+    };
+
     const result = await Product.create(product);
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Product added successfully",
       data: result,
     });
   } catch (err) {
+    fs.unlink(`./uploads/products/${image}`, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+
     res.status(500).json({
       success: false,
       error: err.message,
@@ -41,44 +46,15 @@ exports.addProduct = async (req, res) => {
 
 exports.getAllProducts = async (req, res) => {
   const paginationOptions = pick(req.query, ["page", "limit"]);
-  const filters = pick(req.query, [
-    "category",
-    "subCategory",
-    "subSubCategory",
-  ]);
 
-  const { category, subCategory, subSubCategory } = filters;
   const { page, limit, skip } = calculatePagination(paginationOptions);
 
   try {
-    const result = await Product.find()
-      .skip(skip)
-      .limit(limit)
-      .populate("category")
-      .populate("subCategory")
-      .populate("subSubCategory");
+    const result = await Product.find().skip(skip).limit(limit);
 
     let products = result;
 
-    if (category) {
-      products = products.filter(
-        (product) => product?.category?.slug === category
-      );
-    }
-
-    if (subCategory) {
-      products = products.filter(
-        (product) => product?.subCategory?.slug === subCategory
-      );
-    }
-
-    if (subSubCategory) {
-      products = products.filter(
-        (product) => product?.subSubCategory?.slug === subSubCategory
-      );
-    }
-
-    const total = products.length;
+    const total = products?.length;
 
     res.status(200).json({
       success: true,
@@ -102,10 +78,7 @@ exports.getProductById = async (req, res) => {
   const id = req?.params?.id;
 
   try {
-    const result = await Product.findById(id)
-      .populate("category")
-      .populate("subCategory")
-      .populate("subSubCategory");
+    const result = await Product.findById(id);
 
     if (!result) {
       return res.status(404).json({
@@ -117,33 +90,6 @@ exports.getProductById = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Product fetched successfully",
-      data: result,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-};
-
-exports.getProductBySlug = async (req, res) => {
-  try {
-    const result = await Product.findOne({ slug: req?.params?.slug })
-      .populate("category")
-      .populate("subCategory")
-      .populate("subSubCategory");
-
-    if (!result) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Product",
       data: result,
     });
   } catch (error) {
@@ -190,10 +136,7 @@ exports.deleteProductById = async (req, res) => {
 exports.updateProduct = async (req, res) => {
   const id = req?.params?.id;
   const image = req?.file?.filename;
-  const { title, description } = req?.body;
-  // console.log(title, description);
-
-  const slug = slugify(`${title}-${Date.now()}`).toLowerCase();
+  const { title, description, price } = req?.body;
 
   try {
     const product = await Product.findById(id);
@@ -218,7 +161,7 @@ exports.updateProduct = async (req, res) => {
           title,
           description,
           image,
-          slug,
+          price,
         },
         {
           new: true,
@@ -230,7 +173,7 @@ exports.updateProduct = async (req, res) => {
         {
           title,
           description,
-          slug,
+          price,
         },
         {
           new: true,

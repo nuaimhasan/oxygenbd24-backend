@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const {
-  getCareerBanners,
-  updateCareerBanner,
-  createCareerBanner,
-} = require("../controllers/careerBannerController");
+  addFavicon,
+  getFavicon,
+  updateFavicon,
+} = require("../controllers/logoController");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads/careerBanner");
+    cb(null, "./uploads/logo");
   },
   filename: function (req, file, cb) {
     cb(null, `${Date.now()}-${file.originalname}`);
@@ -17,10 +17,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-router.patch("/update/:id", upload.single("image"), updateCareerBanner);
-
-router.get("/", getCareerBanners);
-
-router.post("/add", upload.single("image"), createCareerBanner);
+router.get("/all", getFavicon);
+router.post("/add", upload.single("favicon"), addFavicon);
+router.patch("/update/:id", upload.single("favicon"), updateFavicon);
 
 module.exports = router;

@@ -1,31 +1,20 @@
 const mongoose = require("mongoose");
 
-const productSchema = new mongoose.Schema({
-  image: {
-    type: String,
-    required: true,
-  },
+const ProductSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
   },
   slug: {
     type: String,
-    required: true,
-    unique: true,
   },
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Categories",
+  price: {
+    type: Number,
     required: true,
   },
-  subCategory: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "SubCategory",
-  },
-  subSubCategory: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "SubSubCategory",
+  image: {
+    type: String,
+    required: true,
   },
   description: {
     type: String,
@@ -33,6 +22,6 @@ const productSchema = new mongoose.Schema({
   },
 });
 
-const Product = mongoose.model("Product", productSchema);
+const Product = mongoose.model("Product", ProductSchema);
 
 module.exports = Product;

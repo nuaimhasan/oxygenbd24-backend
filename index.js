@@ -5,31 +5,19 @@ const dotenv = require("dotenv").config();
 const port = process.env.port || 5000;
 
 // routers
-const bannerRouter = require("./routes/bannerRoutes");
-const contactRouter = require("./routes/contactRoutes");
-const impactSection = require("./routes/impactSectionRoute");
-const impacts = require("./routes/impactsRoute");
+const adminRouter = require("./routes/administratorRoute");
+
 const logoRouter = require("./routes/logoRoutes");
-const clientBannerRouter = require("./routes/clientBannerRoutes");
-const clients = require("./routes/clientsRoute");
-const productRouter = require("./routes/productRoutes");
-const careerBannerRouter = require("./routes/careerBannerRoutes");
-const careerFormRouter = require("./routes/careerFormRoutes");
-const newsEventRouter = require("./routes/newsEventRoute");
+const faviconRouter = require("./routes/faviconRoutes");
+const bannerRouter = require("./routes/bannerRoutes");
 
 const aboutRouter = require("./routes/aboutRoutes");
-const companyProfileRouter = require("./routes/companyProfileRoutes");
-const ourMissionRouter = require("./routes/ourMissionRoutes");
-const ourVisionRouter = require("./routes/ourVisionRoutes");
-const ourTeamRouter = require("./routes/ourTeamRoutes");
+const contactRouter = require("./routes/contactRoutes");
 
-const categoryRouter = require("./routes/categoriesRoutes");
-const subCategoryRouter = require("./routes/subCategoriesRoute");
-const subSubCategoryRouter = require("./routes/subSubCategoriesRoute");
-const newsCategoryRouter = require("./routes/newsCategoriesRoute");
+const productRouter = require("./routes/productRoutes");
+const rentRouter = require("./routes/rentRoutes");
+
 const themeRouter = require("./routes/themeRoutes");
-
-const adminRouter = require("./routes/administratorRoute");
 
 const app = express();
 app.use(cors());
@@ -42,31 +30,19 @@ mongoose.connect(process.env.DB_URL).then(() => {
   console.log("Database connection is successful");
 });
 
-app.use("/banner", bannerRouter);
-app.use("/impactSection", impactSection);
-app.use("/impacts", impacts);
+app.use("/admin", adminRouter);
+
 app.use("/logo", logoRouter);
-app.use("/clientBanner", clientBannerRouter);
-app.use("/clients", clients);
-app.use("/contact", contactRouter);
-app.use("/products", productRouter);
-app.use("/careerBanners", careerBannerRouter);
-app.use("/careerForms", careerFormRouter);
-app.use("/news-events", newsEventRouter);
+app.use("/favicon", faviconRouter);
+app.use("/banner", bannerRouter);
 
 app.use("/about", aboutRouter);
-app.use("/company-profile", companyProfileRouter);
-app.use("/our-mission", ourMissionRouter);
-app.use("/our-vision", ourVisionRouter);
-app.use("/team", ourTeamRouter);
+app.use("/contact", contactRouter);
 
-app.use("/categories", categoryRouter);
-app.use("/sub-categories", subCategoryRouter);
-app.use("/sub-sub-categories", subSubCategoryRouter);
-app.use("/news-category", newsCategoryRouter);
+app.use("/product", productRouter);
+app.use("/rent", rentRouter);
+
 app.use("/themes", themeRouter);
-
-app.use("/admins", adminRouter);
 
 app.get("/", (req, res) => {
   res.send(`Server is Running on port ${port}`);

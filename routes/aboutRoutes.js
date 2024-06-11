@@ -6,6 +6,7 @@ const {
   updateAboutUs,
   createAboutUs,
 } = require("../controllers/aboutControllers");
+const verifyToken = require("../middleware/verifyToken");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -17,10 +18,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-router.patch("/update-about/:id", upload.single("image"), updateAboutUs);
-
 router.get("/", getAboutUs);
-
-router.post("/add-about", upload.single("image"), createAboutUs);
+router.post("/add", verifyToken, upload.single("image"), createAboutUs);
+router.patch("/update/:id", verifyToken, upload.single("image"), updateAboutUs);
 
 module.exports = router;

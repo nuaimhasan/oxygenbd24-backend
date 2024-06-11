@@ -4,8 +4,9 @@ const multer = require("multer");
 const {
   addBanner,
   allBanners,
-  deleteBanner,
+  updateBanner,
 } = require("../controllers/bannerController");
+const verifyToken = require("../middleware/verifyToken");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -17,8 +18,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-router.post("/add-banner", upload.single("image"), addBanner);
-router.get("/allBanners", allBanners);
-router.delete("/delete/:id", deleteBanner);
+router.get("/all", allBanners);
+router.post("/add", verifyToken, upload.single("image"), addBanner);
+router.patch("/update/:id", verifyToken, upload.single("image"), updateBanner);
 
 module.exports = router;
