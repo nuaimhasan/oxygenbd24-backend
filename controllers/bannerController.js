@@ -54,8 +54,6 @@ exports.updateBanner = async (req, res) => {
   const image = req?.file?.filename;
   const data = req?.body;
 
-  console.log(id, data);
-
   try {
     const isExist = await Banner.findById(id);
 

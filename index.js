@@ -17,7 +17,11 @@ const contactRouter = require("./routes/contactRoutes");
 const productRouter = require("./routes/productRoutes");
 const rentRouter = require("./routes/rentRoutes");
 
+const orderRouter = require("./routes/orderRoutes");
+const rentOrderRouter = require("./routes/rentOrderRoutes");
+
 const themeRouter = require("./routes/themeRoutes");
+const seoRouter = require("./routes/seoRoutes");
 
 const app = express();
 app.use(cors());
@@ -42,7 +46,11 @@ app.use("/contact", contactRouter);
 app.use("/product", productRouter);
 app.use("/rent", rentRouter);
 
+app.use("/order", orderRouter);
+app.use("/rentOrder", rentOrderRouter);
+
 app.use("/themes", themeRouter);
+app.use("/seo", seoRouter);
 
 app.get("/", (req, res) => {
   res.send(`Server is Running on port ${port}`);

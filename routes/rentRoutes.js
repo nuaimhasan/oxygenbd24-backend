@@ -9,8 +9,8 @@ const {
 const router = require("express").Router();
 
 router.get("/all", getRent);
-router.get("/:id", getRentById);
 router.post("/add", addRent);
+router.get("/:id", getRentById);
 router.patch("/edit/:id", updateRent);
 router.delete("/delete/:id", deleteRent);
 
