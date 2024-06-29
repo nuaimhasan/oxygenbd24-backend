@@ -13,14 +13,6 @@ const themeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  neutral: {
-    type: String,
-    required: true,
-  },
-  neutralContent: {
-    type: String,
-    required: true,
-  },
 });
 
 const Theme = mongoose.model("Theme", themeSchema);

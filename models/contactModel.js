@@ -17,7 +17,16 @@ const ContactSchema = new mongoose.Schema(
     facebookLink: {
       type: String,
     },
+    messangerLink: {
+      type: String,
+    },
+    wpLink: {
+      type: String,
+    },
     linkedinLink: {
+      type: String,
+    },
+    youtubeLink: {
       type: String,
     },
   },
